@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joyal Jose — A Psychology Portfolio & Field Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --paper: #EDEEE7;
+    --paper-warm: #E3E0D2;
+    --paper-line: #cfcdbf;
+    --ink: #21242A;
+    --ink-soft: #52565d;
+    --plum: #6B4A6E;
+    --plum-deep: #4d3550;
+    --moss: #55694F;
+    --amber: #B9863C;
+    --radius: 3px;
+    --max: 920px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* subtle paper grain */
+  body::before{
+    content:"";
+    position: fixed;
+    inset:0;
+    pointer-events:none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  h1,h2,h3{ font-family:'Fraunces', serif; font-weight:600; margin:0; color: var(--ink); }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--plum);
+  }
+  a{ color: var(--plum); }
+  .container{ max-width: var(--max); margin: 0 auto; padding: 0 28px; position:relative; z-index:2; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position: fixed; top:0; left:0; right:0; z-index: 50;
+    background: rgba(237,238,231,0.88);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .nav-inner{
+    max-width: var(--max); margin:0 auto; padding: 14px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-mark{ font-family:'Fraunces', serif; font-weight:600; font-size:1.05rem; }
+  .nav-mark span{ color: var(--plum); }
+  .nav-links{ display:flex; gap: 26px; list-style:none; margin:0; padding:0; }
+  .nav-links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    text-decoration:none;
+    color: var(--ink-soft);
+    letter-spacing: 0.03em;
+    padding: 6px 4px;
+    border-bottom: 1px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  .nav-links a:hover{ color: var(--plum); border-color: var(--plum); }
+  .nav-toggle{ display:none; background:none; border:1px solid var(--ink); border-radius: var(--radius); padding:6px 10px; font-family:'IBM Plex Mono', monospace; cursor:pointer; }
+
+  @media (max-width: 720px){
+    .nav-links{
+      position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; gap:0; background: var(--paper);
+      border-bottom: 1px solid var(--paper-line);
+      max-height:0; overflow:hidden; transition: max-height .3s ease;
+    }
+    .nav-links.open{ max-height: 300px; }
+    .nav-links a{ padding: 14px 28px; display:block; border-bottom: 1px solid var(--paper-line); }
+    .nav-toggle{ display:block; }
+  }
+
+  section{ position:relative; padding: 110px 0 90px; }
+  section + section{ border-top: 1px solid var(--paper-line); }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding-top: 170px; overflow:hidden; }
+  .hero-grid{
+    display:grid; grid-template-columns: 1.15fr 0.85fr; gap: 40px; align-items:center;
+  }
+  .hero h1{
+    font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 em{ font-style: italic; color: var(--plum); }
+  .hero p.lede{
+    margin-top: 22px; font-size: 1.05rem; color: var(--ink-soft); max-width: 48ch;
+  }
+  .hero-actions{ margin-top: 32px; display:flex; gap:16px; flex-wrap:wrap; }
+  .btn{
+    font-family:'IBM Plex Mono', monospace; font-size: 0.82rem;
+    padding: 12px 20px; border-radius: var(--radius);
+    text-decoration:none; display:inline-block; letter-spacing: .02em;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-solid{ background: var(--ink); color: var(--paper); }
+  .btn-solid:hover{ transform: translateY(-2px); box-shadow: 0 6px 0 var(--plum-deep); }
+  .btn-line{ border: 1px solid var(--ink); color: var(--ink); }
+  .btn-line:hover{ background: var(--ink); color: var(--paper); }
+
+  /* Hero Card Container */
+  .hero-card{
+    background: var(--paper-warm);
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius);
+    padding: 24px 20px 20px;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(33, 36, 42, 0.03);
+    width: 100%;
+  }
+  .hero-card::before{
+    content: "FIG. 01 — SUBJECT";
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    padding: 3px 8px;
+    border-radius: var(--radius);
+    letter-spacing: .05em;
+  }
+
+  /* Ink blot inside card */
+  .blot-wrap{ position:relative; height: 300px; display:flex; align-items:center; justify-content:center; overflow: hidden; border-radius: var(--radius); }
+  .blot{
+    position:relative; width: 280px; height: 280px;
+    filter: blur(16px) contrast(28);
+  }
+  .blob{
+    position:absolute; background: var(--plum);
+    border-radius: 46% 54% 60% 40% / 55% 45% 55% 45%;
+    animation: morph 9s ease-in-out infinite alternate;
+    opacity: 0.92;
+  }
+  .blob.b1{ width:150px; height:170px; left: 40px; top: 30px; }
+  .blob.b2{ width:110px; height:130px; left: 10px; top: 140px; animation-delay: -3s; background: var(--ink); }
+  .blob.b3{ width:90px; height:70px; left: 60px; top: 200px; animation-delay: -6s; }
+  .blot-mirror{
+    position:absolute; inset:0; transform: scaleX(-1); left: 150px;
+  }
+  @keyframes morph{
+    0%{ border-radius: 46% 54% 60% 40% / 55% 45% 55% 45%; transform: rotate(0deg) scale(1); }
+    50%{ border-radius: 60% 40% 44% 56% / 40% 60% 40% 60%; transform: rotate(6deg) scale(1.05); }
+    100%{ border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%; transform: rotate(-4deg) scale(0.97); }
+  }
+  
+  /* Circular cropped image overlay */
+  .hero-photo-overlay{
+    position: absolute;
+    z-index: 2;
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    box-shadow: 0 4px 12px rgba(33, 36, 42, 0.15);
+    border: 2px solid var(--paper-warm);
+  }
+  .blot-caption{
+    text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 0.72rem;
+    color: var(--ink-soft); margin-top: 12px; letter-spacing: .04em;
+  }
+
+  /* Mobile Adjustments for Hero Image Section */
+  @media (max-width: 820px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 50px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-card {
+      padding: 20px 12px 16px;
+    }
+    .blot-wrap {
+      height: 230px;
+    }
+    .blot {
+      transform: scale(0.8);
+    }
+    .hero-photo-overlay {
+      width: 160px;
+      height: 160px;
+    }
+  }
+
+  /* small divider blot between sections */
+  .divider-mark{
+    width: 34px; height: 34px; margin: 0 auto 36px;
+    filter: blur(3px) contrast(16);
+    opacity: 0.8;
+  }
+  .divider-mark .blob{ background: var(--ink-soft); animation: none; border-radius: 50% 46% 58% 42% / 52% 48% 52% 48%; width:100%; height:100%; left:0; top:0; }
+  .divider-mark .blot-mirror{ left: 17px; }
+  .divider-mark{ position:relative; }
+
+  /* ---------- REVEAL ---------- */
+  [data-reveal]{ opacity:0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  [data-reveal].in-view{ opacity:1; transform: translateY(0); }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{ display:grid; grid-template-columns: 120px 1fr; gap: 36px; }
+  .about-grid .rule{ border-left: 1px solid var(--paper-line); padding-left: 36px; }
+  .marginalia{
+    font-family:'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--ink-soft);
+    line-height:1.7;
+  }
+  .about p{ max-width: 66ch; margin: 0 0 16px; }
+  .about strong{ color: var(--plum-deep); }
+  @media (max-width: 640px){ .about-grid{ grid-template-columns: 1fr; } .about-grid .rule{ border-left:none; padding-left:0; border-top: 1px solid var(--paper-line); padding-top:20px; } }
+
+  /* ---------- SECTION HEADS ---------- */
+  .head{ margin-bottom: 46px; }
+  .head h2{ font-size: clamp(1.7rem, 3vw, 2.2rem); margin-top: 6px; }
+  .head p{ color: var(--ink-soft); max-width: 56ch; margin-top: 10px; }
+
+  /* ---------- CASE FILES (projects) ---------- */
+  .case{
+    background: var(--paper-warm);
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius);
+    padding: 34px;
+    margin-bottom: 26px;
+    position: relative;
+  }
+  .case::before{
+    content: attr(data-id);
+    position:absolute; top:-13px; left: 28px;
+    background: var(--ink); color: var(--paper);
+    font-family:'IBM Plex Mono', monospace; font-size: 0.7rem;
+    padding: 4px 10px; border-radius: var(--radius); letter-spacing: .05em;
+  }
+  .case-top{ display:flex; justify-content:space-between; gap: 20px; flex-wrap:wrap; align-items:flex-start; margin-top: 6px;}
+  .case h3{ font-size: 1.5rem; }
+  .case .status{
+    font-family:'IBM Plex Mono', monospace; font-size: 0.7rem;
+    color: var(--moss); border: 1px solid var(--moss); border-radius: var(--radius);
+    padding: 4px 10px; white-space:nowrap; height: fit-content;
+  }
+  .case p.desc{ margin: 16px 0; color: var(--ink-soft); max-width: 68ch; }
+  .tag-row{ display:flex; gap:8px; flex-wrap:wrap; margin: 14px 0 18px; }
+  .tag{
+    font-family:'IBM Plex Mono', monospace; font-size: 0.68rem;
+    background: var(--paper); border: 1px solid var(--paper-line);
+    padding: 4px 9px; border-radius: var(--radius); color: var(--ink-soft);
+  }
+  .case-links{ display:flex; gap: 18px; flex-wrap:wrap; }
+  .case-links a{ font-family:'IBM Plex Mono', monospace; font-size: 0.78rem; text-decoration:none; border-bottom: 1px solid var(--plum); }
+  .case-links a:hover{ color: var(--plum-deep); }
+
+  /* ---------- PAPERS (bibliography style) ---------- */
+  .biblio-item{
+    display:grid; grid-template-columns: 90px 1fr; gap: 20px;
+    padding: 20px 0; border-bottom: 1px solid var(--paper-line);
+  }
+  .biblio-item:first-child{ border-top: 1px solid var(--paper-line); }
+  .biblio-year{ font-family:'IBM Plex Mono', monospace; color: var(--ink-soft); font-size: 0.85rem; padding-top:2px; }
+  .biblio-title{ font-family:'Fraunces', serif; font-size: 1.1rem; font-weight:500; }
+  .biblio-meta{ color: var(--ink-soft); font-size: 0.92rem; margin-top: 4px; }
+  .biblio-item a{ font-family:'IBM Plex Mono', monospace; font-size: 0.78rem; }
+
+  /* ---------- CERTIFICATES (ledger, understated) ---------- */
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table.ledger{ width:100%; border-collapse: collapse; min-width: 500px; }
+  table.ledger th{
+    text-align:left; font-family:'IBM Plex Mono', monospace; font-size: 0.7rem;
+    letter-spacing:.06em; text-transform:uppercase; color: var(--ink-soft);
+    border-bottom: 1px solid var(--ink); padding: 10px 12px;
+  }
+  table.ledger td{
+    padding: 14px 12px; border-bottom: 1px solid var(--paper-line);
+    font-size: 0.95rem; vertical-align: top;
+  }
+  table.ledger tr:hover td{ background: var(--paper-warm); }
+  table.ledger td.year, table.ledger td.issuer{ color: var(--ink-soft); font-family:'IBM Plex Mono', monospace; font-size: 0.82rem; }
+
+  @media (max-width: 600px) {
+    table.ledger th, table.ledger td {
+      padding: 10px 8px;
+    }
+  }
+
+  /* ---------- FIELD LOG (timeline) ---------- */
+  .log{ position:relative; padding-left: 30px; }
+  .log::before{ content:""; position:absolute; left: 5px; top:6px; bottom: 6px; width:1px; background: var(--paper-line); }
+  .log-entry{ position:relative; padding-bottom: 34px; }
+  .log-entry:last-child{ padding-bottom:0; }
+  .log-entry::before{
+    content:""; position:absolute; left: -30px; top: 4px; width:9px; height:9px;
+    border-radius:50%; background: var(--plum); border: 2px solid var(--paper);
+    box-shadow: 0 0 0 1px var(--plum);
+  }
+  .log-date{ font-family:'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--plum); }
+  .log-entry h3{ font-size: 1.05rem; margin-top: 4px; }
+  .log-entry p{ color: var(--ink-soft); margin: 6px 0 0; max-width: 60ch; }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{ padding: 90px 0 60px; }
+  .contact-inner{ text-align:center; }
+  footer h2{ font-size: clamp(1.8rem, 4vw, 2.6rem); }
+  footer p{ color: var(--ink-soft); margin-top: 14px; max-width: 50ch; margin-left:auto; margin-right:auto; }
+  .contact-links{ display:flex; justify-content:center; gap: 26px; margin-top: 30px; flex-wrap:wrap; }
+  .contact-links a{
+    font-family:'IBM Plex Mono', monospace; font-size: 0.85rem; text-decoration:none;
+    color: var(--ink); border-bottom: 1px solid var(--ink);
+  }
+  .contact-links a:hover{ color: var(--plum); border-color: var(--plum); }
+  .foot-note{ margin-top: 60px; font-family:'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--ink-soft); text-align:center; opacity:.7; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  ::selection{ background: var(--plum); color: var(--paper); }
+  :focus-visible{ outline: 2px solid var(--plum); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-mark">field<span>notes</span></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#papers">Papers</a></li>
+      <li><a href="#certificates">Certificates</a></li>
+      <li><a href="#log">Field Log</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div data-reveal>
+      <p class="eyebrow">Psychology Researcher · Software Engineer</p>
+      <h1>I'm <em>Joyal Jose</em>,<br>Bridging Human Cognition &amp; Code.</h1>
+      <p class="lede">
+        Engineering Digital Tools for Psychological Science, Research, and Education. I build automated software to streamline quantitative research workflows and elevate psychological learning.
+      </p>
+      <div class="hero-actions">
+        <a href="#work" class="btn btn-solid">Explore Projects</a>
+        <a href="#contact" class="btn btn-line">Get in Touch</a>
+      </div>
+    </div>
+    
+    <!-- HERO PHOTO & BLOT CARD -->
+    <div class="hero-card" data-reveal>
+      <div class="blot-wrap">
+        <div class="blot">
+          <div class="blob b1"></div>
+          <div class="blob b2"></div>
+          <div class="blob b3"></div>
+          <div class="blot-mirror">
+            <div class="blob b1"></div>
+            <div class="blob b2"></div>
+            <div class="blob b3"></div>
+          </div>
+        </div>
+        <img src="Joyal.png" alt="Joyal Jose" class="hero-photo-overlay">
+      </div>
+      <p class="blot-caption">what you see here says as much about you as it does about the ink</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="container">
+    <div class="divider-mark"><div class="blob"></div><div class="blot-mirror"><div class="blob"></div></div></div>
+    <div class="about-grid about" data-reveal>
+      <div class="marginalia">
+        NOTE —<br>on why<br>i'm doing<br>this
+      </div>
+      <div class="rule">
+        <p class="eyebrow">About</p>
+        <h2 style="margin-bottom:18px;">Engineering efficient systems for human science.</h2>
+        <p>
+          As a researcher and software builder, I focus on the intersection of human behavior and technology. I noticed that much of the academic process is bogged down by redundant manual data entry, prone to human scoring errors, or constrained by static learning tools. <strong>I build software to fix that</strong>.
+        </p>
+        <p>
+          Whether automating psychometric data scaling for quantitative psychological studies or designing structured course platforms for student retrieval, my goal is to make psychological methodology faster, more accurate, and accessible.
+        </p>
+        <p>
+          My active research explores the cognitive implications of artificial intelligence integration in academic environments, alongside studies in developmental, clinical, and social psychology.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WORK / CASE FILES ================= -->
+<section id="work">
+  <div class="container">
+    <div class="head" data-reveal>
+      <p class="eyebrow">Work</p>
+      <h2>Purpose-built tools for research &amp; education.</h2>
+      <p>Interactive web applications designed to solve real operational bottlenecks in research and academic studies.</p>
+    </div>
+
+    <!-- CASE FILE 01 — Research Helper -->
+    <div class="case" data-id="PSY-01" data-reveal>
+      <div class="case-top">
+        <h3>Research Helper</h3>
+        <span class="status">● active</span>
+      </div>
+      <p class="desc">
+        An automated psychometric data tool built for academic researchers to streamline scale scoring, eliminate manual entry errors, and accelerate quantitative data processing in research workflows.
+      </p>
+      <div class="tag-row">
+        <span class="tag">psychometrics</span>
+        <span class="tag">data automation</span>
+        <span class="tag">scale scoring</span>
+        <span class="tag">quantitative analysis</span>
+      </div>
+      <div class="case-links">
+        <a href="https://psychometrics-cyan.vercel.app/" target="_blank" rel="noopener">Launch App →</a>
+      </div>
+    </div>
+
+    <!-- CASE FILE 02 — Psych Catalog -->
+    <div class="case" data-id="PSY-02" data-reveal>
+      <div class="case-top">
+        <h3>Psych Catalog</h3>
+        <span class="status">● active</span>
+      </div>
+      <p class="desc">
+        A centralized digital workspace designed for psychology students to streamline complex course materials, track core theories, and accelerate exam preparation in one intuitive hub.
+      </p>
+      <div class="tag-row">
+        <span class="tag">edtech</span>
+        <span class="tag">course companion</span>
+        <span class="tag">active learning</span>
+        <span class="tag">theory tracking</span>
+      </div>
+      <div class="case-links">
+        <a href="https://course-kappa-two.vercel.app/" target="_blank" rel="noopener">Launch App →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PAPERS ================= -->
+<section id="papers">
+  <div class="container">
+    <div class="head" data-reveal>
+      <p class="eyebrow">Papers &amp; Presentations</p>
+      <h2>Academic Research &amp; Conference Papers.</h2>
+      <p>Peer-reviewed presentations and manuscripts exploring cognition, self-regulation, and family dynamics.</p>
+    </div>
+
+    <div data-reveal>
+      <div class="biblio-item">
+        <div class="biblio-year">2026</div>
+        <div>
+          <div class="biblio-title">Academic AI Usage and Cognitive Flexibility</div>
+          <div class="biblio-meta">A study exploring the cognitive implications of artificial intelligence integration in academic environments. Presented preliminary findings at the Dr. V. K. Alexander Memorial National Seminar (Feb 2026) and the International Conference on Contemporary Psychotherapeutics (Feb 2026). Manuscript currently under academic review.</div>
+        </div>
+      </div>
+      <div class="biblio-item">
+        <div class="biblio-year">2026</div>
+        <div>
+          <div class="biblio-title">Maternal Burnout and Flourishing Among Mothers of Emerging Adults</div>
+          <div class="biblio-meta">Presented at the International Conference on Contemporary Psychotherapeutics: Innovations in Practice and Research (Feb 2026).</div>
+        </div>
+      </div>
+      <div class="biblio-item">
+        <div class="biblio-year">2025</div>
+        <div>
+          <div class="biblio-title">Self-Regulation Among Boarding and Day Scholars in Higher Secondary Education</div>
+          <div class="biblio-meta">Presented at the International Conference on Psychotherapeutics and Psychological Wellbeing (Jan 2025).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CERTIFICATES ================= -->
+<section id="certificates">
+  <div class="container">
+    <div class="head" data-reveal>
+      <p class="eyebrow">Certificates</p>
+      <h2>Courses &amp; Clinical Credentials.</h2>
+      <p>Verified training in clinical, therapeutic, and counseling modalities.</p>
+    </div>
+
+    <div data-reveal>
+      <div class="table-responsive">
+        <table class="ledger">
+          <thead>
+            <tr><th>Credential</th><th>Issuer</th><th>ID / Status</th><th>Year</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Advanced Diploma in Cognitive Behavioural Therapy</td><td class="issuer">Alison</td><td>ID: 4253-58782357</td><td class="year">2026</td></tr>
+            <tr><td>Developing Clinical Empathy: Making a Difference in Patient Care</td><td class="issuer">FutureLearn</td><td>Verified</td><td class="year">2026</td></tr>
+            <tr><td>Certification in Couple Therapy and Counseling - Accredited</td><td class="issuer">Udemy</td><td>Accredited</td><td class="year">2026</td></tr>
+            <tr><td>The Complete Child-Centered EMDR - Accredited Course</td><td class="issuer">Udemy</td><td>Accredited</td><td class="year">2026</td></tr>
+            <tr><td>Managing Mental Health and Stress</td><td class="issuer">FutureLearn</td><td>Verified</td><td class="year">2025</td></tr>
+            <tr><td>Professional Certification in Counseling - Fully Accredited</td><td class="issuer">Udemy</td><td>ID: UC-ca0910eb-9820-4a1e-8b52-58ec5b5db9ac</td><td class="year">2021</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FIELD LOG (timeline) ================= -->
+<section id="log">
+  <div class="container">
+    <div class="head" data-reveal>
+      <p class="eyebrow">Field log</p>
+      <h2>Academic &amp; Development Timeline.</h2>
+      <p>Key milestones in psychological research, application development, and conference presentations.</p>
+    </div>
+
+    <div class="log" data-reveal>
+      <div class="log-entry">
+        <div class="log-date">2026</div>
+        <h3>AI Cognition Research &amp; Psychometric Tooling</h3>
+        <p>Presented preliminary findings on Academic AI Usage and Cognitive Flexibility across multiple national and international conferences. Released Research Helper to streamline automated scale scoring.</p>
+      </div>
+      <div class="log-entry">
+        <div class="log-date">2025</div>
+        <h3>Self-Regulation Studies &amp; Psych Catalog</h3>
+        <p>Presented research on high school self-regulation patterns at ICPPW. Built and launched Psych Catalog to aggregate psychological course theories for undergraduates.</p>
+      </div>
+      <div class="log-entry">
+        <div class="log-date">2021</div>
+        <h3>Counseling &amp; Clinical Foundations</h3>
+        <p>Completed professional accredited certification in counseling, initiating ongoing coursework across CBT, EMDR, and clinical empathy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<footer id="contact">
+  <div class="container contact-inner" data-reveal>
+    <p class="eyebrow">Get in touch</p>
+    <h2>Connect or Collaborate.</h2>
+    <p>Open to discussions regarding psychometric tooling, cognitive research collaborations, or web engineering projects.</p>
+    
+    <div class="contact-links">
+      <a href="https://www.linkedin.com/in/joyal-josepsy" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.instagram.com/leaping_hope_x?igsh=MTAxY2JibXZjamNndg==" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://psychometrics-cyan.vercel.app/" target="_blank" rel="noopener">Research Helper App</a>
+      <a href="https://course-kappa-two.vercel.app/" target="_blank" rel="noopener">Psych Catalog App</a>
+    </div>
+  </div>
+  <p class="foot-note">Updated 2026 · Built by Joyal Jose</p>
+</footer>
+
+<script>
+  // mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
